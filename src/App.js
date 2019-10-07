@@ -1,11 +1,11 @@
-import React from 'react';
-import './App.css';
-import { Typography } from '@material-ui/core';
+import React from "react";
+import "./App.css";
+import Dashboard from "./Dashboard";
 
 function App() {
   return (
     <React.Fragment>
-      <Typography>Hello world</Typography>
+      <Dashboard />
     </React.Fragment>
   );
 }
