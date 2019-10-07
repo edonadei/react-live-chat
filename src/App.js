@@ -1,6 +1,4 @@
 import React from 'react';
-import Toolbar from './components/Toolbar';
-import Layout from './components/Layouts'
 import './App.css';
 import { Typography } from '@material-ui/core';
 
