@@ -1,11 +1,14 @@
 import React from "react";
 import "./App.css";
 import Dashboard from "./Dashboard";
+import Store from "./Store";
 
 function App() {
   return (
     <React.Fragment>
-      <Dashboard />
+      <Store>
+        <Dashboard />
+      </Store>
     </React.Fragment>
   );
 }

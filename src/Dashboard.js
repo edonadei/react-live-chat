@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import {CTX} from './Store'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: "300px"
   },
   topicsWindow: {
     width: "30%",
@@ -42,6 +43,17 @@ const useStyles = makeStyles(theme => ({
 
 const Dashboard = () => {
   const classes = useStyles();
+
+  // Context store
+  const {allChats} = React.useContext(CTX);
+  
+  // We get the keys from our objects to get the title of it
+  const topics = Object.keys(allChats);
+
+    // Local state
+    const [activeTopic, changeActiveTopic] = React.useState(topics[0])
+
+  // State hooks API
   const [values, setValues] = React.useState({
     name: "Cat in the Hat",
     age: "",
@@ -58,14 +70,14 @@ const Dashboard = () => {
         Chat app
       </Typography>
       <Typography align="center" variant="h5" component="h5">
-        Topic placeholder
+        {activeTopic}
       </Typography>
       <div className={classes.flex}>
         <div className={classes.topicsWindow}>
           <List>
-            {["topic1", "topic2"].map(topic => {
+            {topics.map(topic => {
               return (
-                <ListItem key={topic} button>
+                <ListItem key={topic} onClick={e => changeActiveTopic(e.target.innerText)} button>
                   <ListItemText primary={topic} />
                 </ListItem>
               );
@@ -73,14 +85,11 @@ const Dashboard = () => {
           </List>
         </div>
         <div className={classes.chatWindow}>
-          {[
-            { from: "user", msg: "hello" },
-            { from: "Emrick", msg: "hello back" }
-          ].map((chat, i) => {
+          {allChats[activeTopic].map((chat, i) => {
             return (
               <div className={classes.flex} key={i}>
                 <Chip className={classes.chipName} label={chat.from} />
-                <Typography variant="p">
+                <Typography variant="body1">
                   {chat.msg}
                 </Typography>
               </div>
@@ -90,8 +99,8 @@ const Dashboard = () => {
       </div>
       <div className={classes.flex}>
         <Grid container>
-          <Grid item xs={9} lg={6}/>
-          <Grid item xs={3} lg={6}>
+          <Grid item />
+          <Grid item>
             <TextField
               id="standard-name"
               label="Send a chat"
