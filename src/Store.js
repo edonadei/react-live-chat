@@ -1,5 +1,5 @@
 import React from "react";
-import io from 'socket.io-client'
+import io from "socket.io-client";
 
 export const CTX = React.createContext();
 
@@ -24,16 +24,9 @@ export const CTX = React.createContext();
 */
 
 const initState = {
-  General: [
-    { from: "aaron", msg: "hello" },
-    { from: "arnold", msg: "hello" },
-    { from: "franklin", msg: "hello" }
-  ],
-  NSFW: [
-    { from: "patoche", msg: "hello" },
-    { from: "onche", msg: "hello" },
-    { from: "plouk", msg: "hello" }
-  ]
+  General: [],
+  Working: [],
+  NSFW: []
 };
 
 function reducer(state, action) {
@@ -58,18 +51,28 @@ function reducer(state, action) {
 
 let socket;
 
+function sendChatAction(value) {
+  socket.emit("chat message", value);
+}
+
 const Store = props => {
+  const [allChats, dispatch] = React.useReducer(reducer, initState);
 
   // Creation of socket.io client by reaching the port 3001
   if (!socket) {
-    socket = io(':3001')
+    socket = io(":3001");
+    // We're listening to the broadcast
+    socket.on("chat message", function(msg) {
+      dispatch({ type: "RECEIVE_MESSAGE", payload: msg });
+    });
   }
 
-  const [allChats] = React.useReducer(reducer, initState);
+  // Generating base name
+  const user = "Anon" + Math.floor(Math.random() * 10) + 1;
 
   return (
     // We're passing to our provider multiple stuff by adding multiples objects in one
-    <CTX.Provider value={{allChats}}>
+    <CTX.Provider value={{ allChats, sendChatAction, user }}>
       {props.children}
     </CTX.Provider>
   );

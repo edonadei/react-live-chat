@@ -1,10 +1,17 @@
 import React from "react";
-import { Paper, Typography, Chip, Button, TextField, Grid } from "@material-ui/core";
+import {
+  Paper,
+  Typography,
+  Chip,
+  Button,
+  TextField,
+  Grid
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import {CTX} from './Store'
+import { CTX } from "./Store";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,24 +52,14 @@ const Dashboard = () => {
   const classes = useStyles();
 
   // Context store
-  const {allChats} = React.useContext(CTX);
-  
+  const { allChats, sendChatAction, user } = React.useContext(CTX);
+
   // We get the keys from our objects to get the title of it
   const topics = Object.keys(allChats);
 
-    // Local state
-    const [activeTopic, changeActiveTopic] = React.useState(topics[0])
-
-  // State hooks API
-  const [values, setValues] = React.useState({
-    name: "Cat in the Hat",
-    age: "",
-    multiline: "Controlled",
-    currency: "EUR"
-  });
-  const handleChange = name => event => {
-    setValues({ ...values, [name]: event.target.value });
-  };
+  // Local state
+  const [activeTopic, changeActiveTopic] = React.useState(topics[0]);
+  const [textValue, changeTextValue] = React.useState("");
 
   return (
     <Paper className={classes.root}>
@@ -77,7 +74,11 @@ const Dashboard = () => {
           <List>
             {topics.map(topic => {
               return (
-                <ListItem key={topic} onClick={e => changeActiveTopic(e.target.innerText)} button>
+                <ListItem
+                  key={topic}
+                  onClick={e => changeActiveTopic(e.target.innerText)}
+                  button
+                >
                   <ListItemText primary={topic} />
                 </ListItem>
               );
@@ -105,10 +106,21 @@ const Dashboard = () => {
               id="standard-name"
               label="Send a chat"
               className={classes.textField}
-              values="values.name"
-              onChange={handleChange("name")}
+              value={textValue}
+              onChange={e => changeTextValue(e.target.value)}
             />
-            <Button variant="contained" color="primary">
+            <Button
+              onClick={() => {
+                sendChatAction({
+                  from: user,
+                  topic: activeTopic,
+                  msg: textValue
+                });
+                changeTextValue("");
+              }}
+              variant="contained"
+              color="primary"
+            >
               Send
             </Button>
           </Grid>
