@@ -51,6 +51,9 @@ function reducer(state, action) {
 
 let socket;
 
+  // Generating base name
+const user = "Anon" + Math.floor(Math.random() * 10) + 1;
+
 function sendChatAction(value) {
   socket.emit("chat message", value);
 }
@@ -66,9 +69,6 @@ const Store = props => {
       dispatch({ type: "RECEIVE_MESSAGE", payload: msg });
     });
   }
-
-  // Generating base name
-  const user = "Anon" + Math.floor(Math.random() * 10) + 1;
 
   return (
     // We're passing to our provider multiple stuff by adding multiples objects in one

@@ -5,7 +5,7 @@ import {
   Chip,
   Button,
   TextField,
-  Grid
+  Box
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -26,12 +26,12 @@ const useStyles = makeStyles(theme => ({
     marginRight: "5px"
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: "300px"
+    marginLeft: theme.spacing(),
+    marginRight: theme.spacing(),
+    width: "60%"
   },
   topicsWindow: {
-    width: "30%",
+    width: "31.3%",
     height: "300px",
     borderRight: "2px solid grey"
   },
@@ -39,6 +39,15 @@ const useStyles = makeStyles(theme => ({
     width: "70%",
     height: "300px",
     padding: "20px"
+  },
+  inputWindow: {
+    width: "70%",
+    height: "50px",
+    textAlign: "center"
+  },
+  changeNameWindow: {
+    width: "30%",
+    height: "50px"
   },
   chatBox: {
     width: "85%"
@@ -60,6 +69,10 @@ const Dashboard = () => {
   // Local state
   const [activeTopic, changeActiveTopic] = React.useState(topics[0]);
   const [textValue, changeTextValue] = React.useState("");
+
+  function changeName (event) {
+    // Need to be finished, can't use a state right now, just create a local hook
+  }
 
   return (
     <Paper className={classes.root}>
@@ -88,43 +101,45 @@ const Dashboard = () => {
         <div className={classes.chatWindow}>
           {allChats[activeTopic].map((chat, i) => {
             return (
-              <div className={classes.flex} key={i}>
-                <Chip className={classes.chipName} label={chat.from} />
-                <Typography variant="body1">
-                  {chat.msg}
-                </Typography>
-              </div>
+              <Box marginBottom="3px">
+                <div className={classes.flex} key={i}>
+                  <Chip className={classes.chipName} label={chat.from} />
+                  <Typography variant="body1">
+                    {chat.msg}
+                  </Typography>
+                </div>
+              </Box>
             );
           })}
         </div>
       </div>
       <div className={classes.flex}>
-        <Grid container>
-          <Grid item />
-          <Grid item>
-            <TextField
-              id="standard-name"
-              label="Send a chat"
-              className={classes.textField}
-              value={textValue}
-              onChange={e => changeTextValue(e.target.value)}
-            />
-            <Button
-              onClick={() => {
-                sendChatAction({
-                  from: user,
-                  topic: activeTopic,
-                  msg: textValue
-                });
-                changeTextValue("");
-              }}
-              variant="contained"
-              color="primary"
-            >
-              Send
-            </Button>
-          </Grid>
-        </Grid>
+        <Box className={classes.changeNameWindow}>
+          <TextField value={user} onChange={e => changeName(e.target.value)} />
+        </Box>
+        <Box className={classes.inputWindow}>
+          <TextField
+            id="standard-name"
+            label="Send a chat"
+            className={classes.textField}
+            value={textValue}
+            onChange={e => changeTextValue(e.target.value)}
+          />
+          <Button
+            onClick={() => {
+              sendChatAction({
+                from: user,
+                topic: activeTopic,
+                msg: textValue
+              });
+              changeTextValue("");
+            }}
+            variant="contained"
+            color="primary"
+          >
+            Send
+          </Button>
+        </Box>
       </div>
     </Paper>
   );
