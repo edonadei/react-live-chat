@@ -38,7 +38,17 @@ const useStyles = makeStyles(theme => ({
   chatWindow: {
     width: "70%",
     height: "300px",
-    padding: "20px"
+    padding: "20px",
+    overflow: "auto",
+    transform: "rotate(180deg)",
+    direction: "rtl"
+  },
+  MessageBox: {
+    marginBottom: "3px",
+    direction: "ltr",
+    transform: "rotate(180deg)",
+    display: "flex",
+    alignItems: "center"
   },
   inputWindow: {
     width: "70%",
@@ -61,7 +71,7 @@ const Dashboard = () => {
   const classes = useStyles();
 
   // Context store
-  const { allChats, sendChatAction, user } = React.useContext(CTX);
+  const { allChats, sendChatAction } = React.useContext(CTX);
 
   // We get the keys from our objects to get the title of it
   const topics = Object.keys(allChats);
@@ -69,8 +79,12 @@ const Dashboard = () => {
   // Local state
   const [activeTopic, changeActiveTopic] = React.useState(topics[0]);
   const [textValue, changeTextValue] = React.useState("");
+  // Generating base name
+  const [user, changeUser] = React.useState(
+    "Anon" + Math.floor(Math.random() * 10) + 1
+  );
 
-  function changeName (event) {
+  function changeName(event) {
     // Need to be finished, can't use a state right now, just create a local hook
   }
 
@@ -101,13 +115,9 @@ const Dashboard = () => {
         <div className={classes.chatWindow}>
           {allChats[activeTopic].map((chat, i) => {
             return (
-              <Box marginBottom="3px">
-                <div className={classes.flex} key={i}>
-                  <Chip className={classes.chipName} label={chat.from} />
-                  <Typography variant="body1">
-                    {chat.msg}
-                  </Typography>
-                </div>
+              <Box className={classes.MessageBox} key={i}>
+                <Chip className={classes.chipName} label={chat.from} />
+                <Typography variant="body1">{chat.msg}</Typography>
               </Box>
             );
           })}
@@ -115,9 +125,13 @@ const Dashboard = () => {
       </div>
       <div className={classes.flex}>
         <Box className={classes.changeNameWindow}>
-          <TextField value={user} onChange={e => changeName(e.target.value)} />
+          <TextField
+            label="Change name"
+            value={user}
+            onChange={e => changeUser(e.target.value)}
+          />
         </Box>
-        <Box className={classes.inputWindow}>
+        <Box color="text.primary" className={classes.inputWindow}>
           <TextField
             id="standard-name"
             label="Send a chat"
@@ -127,12 +141,15 @@ const Dashboard = () => {
           />
           <Button
             onClick={() => {
-              sendChatAction({
-                from: user,
-                topic: activeTopic,
-                msg: textValue
-              });
-              changeTextValue("");
+              if (textValue === "") {
+              } else {
+                sendChatAction({
+                  from: user,
+                  topic: activeTopic,
+                  msg: textValue
+                });
+                changeTextValue("");
+              }
             }}
             variant="contained"
             color="primary"

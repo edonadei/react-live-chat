@@ -51,9 +51,6 @@ function reducer(state, action) {
 
 let socket;
 
-  // Generating base name
-const user = "Anon" + Math.floor(Math.random() * 10) + 1;
-
 function sendChatAction(value) {
   socket.emit("chat message", value);
 }
@@ -72,7 +69,7 @@ const Store = props => {
 
   return (
     // We're passing to our provider multiple stuff by adding multiples objects in one
-    <CTX.Provider value={{ allChats, sendChatAction, user }}>
+    <CTX.Provider value={{ allChats, sendChatAction }}>
       {props.children}
     </CTX.Provider>
   );
