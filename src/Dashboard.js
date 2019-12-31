@@ -40,13 +40,9 @@ const useStyles = makeStyles(theme => ({
     height: "300px",
     padding: "20px",
     overflow: "auto",
-    transform: "rotate(180deg)",
-    direction: "rtl"
   },
   MessageBox: {
     marginBottom: "3px",
-    direction: "ltr",
-    transform: "rotate(180deg)",
     display: "flex",
     alignItems: "center"
   },
